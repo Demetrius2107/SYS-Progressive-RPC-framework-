@@ -27,21 +27,19 @@ public class ServerHandler extends SimpleChannelInboundHandler<RpcProtocol<RpcRe
         final RpcRequest rpcRequest = rpcRequestRpcProtocol.getBody();
         final RpcResponse response = new RpcResponse();
         final RpcProtocol<RpcResponse> rpcResponseProtocol = new RpcProtocol<RpcResponse>();
-        final MsgHeader header = rpcProtocol.getHeader();
+        final MsgHeader header = rpcRequestRpcProtocol.getHeader();
 
         header.setMsgType((byte) MsgType.RESPONSE.ordinal());
-        rpcRequestRpcProtocol.setHeader(header);
+        rpcResponseProtocol.setHeader(header);
         final Invoker invoker = InvokerFactory.get(RpcInvoker.JDK);
 
-        try{
+        try {
             final Object data = invoker.invoke(new Invocation(rpcRequest));
             response.setData(data);
-        } catch (Exception e){
+        } catch (Exception e) {
             response.setException(e);
         }
-        rpcRequestRpcProtocol.setBody(response);
-
-
-
+        rpcResponseProtocol.setBody(response);
+        channelHandlerContext.writeAndFlush(rpcResponseProtocol);
     }
 }
