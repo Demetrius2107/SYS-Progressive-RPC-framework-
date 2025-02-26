@@ -3,6 +3,7 @@ package com.hua.socket.codec;
 import com.hua.common.constants.MsgType;
 import com.hua.common.constants.ProtocolConstatns;
 import com.hua.common.constants.RpcSerialization;
+import com.hua.socket.serilization.SerializationFactory;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
@@ -60,7 +61,7 @@ public class RpcDecoder extends ByteToMessageDecoder {
         int dataLength = byteBuf.readInt();
 
         // 如果可读字节数小于消息体长度，说明还没有接收完整个消息体，回退并返回
-        if(byteBuf.readableBytes() < dataLength){
+        if (byteBuf.readableBytes() < dataLength) {
             // 回退标志
             byteBuf.resetReaderIndex();
             return;
@@ -72,7 +73,7 @@ public class RpcDecoder extends ByteToMessageDecoder {
 
         // 处理消息类型
         MsgType msgTypeEnum = MsgType.findByType(msgType);
-        if(msgTypeEnum == null){
+        if (msgTypeEnum == null) {
             return;
         }
 
@@ -87,10 +88,12 @@ public class RpcDecoder extends ByteToMessageDecoder {
         header.setSerializationLen(len);
         header.setMsgLen(dataLength);
 
-        RpcSerialization rpcSerialization = SerializationFac
-
-
-
+        com.hua.socket.serilization.RpcSerialization rpcSerialization = SerializationFactory.get(RpcSerialization.get(serialization));
+        final String body = rpcSerialization.deserialize(data, String.class);
+        RpcProtocol protocol = new RpcProtocol<>();
+        protocol.setHeader(header);
+        protocol.setBody(body);
+        list.add(protocol);
 
 
     }

@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.hua</groupId>
-        <artifactId>Progressive-RPC-freamework</artifactId>
+        <artifactId>Progressive-RPC-framework</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 
