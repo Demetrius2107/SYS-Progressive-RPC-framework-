@@ -12,6 +12,7 @@
         <module>Socket</module>
         <module>Netty</module>
         <module>invoke</module>
+        <module>Proxy</module>
     </modules>
 
     <properties>
