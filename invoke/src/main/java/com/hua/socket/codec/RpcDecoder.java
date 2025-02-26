@@ -78,20 +78,20 @@ public class RpcDecoder extends ByteToMessageDecoder {
         header.setSerialization(bytes);
         header.setSerializationLen(len);
         header.setMsgLen(dataLength);
-        RpcSerialization rpcSerialization = SerializationFactory.get(com.hua.common.constants.RpcSerialization.get(serialization));
+
+        com.hua.socket.serilization.RpcSerialization rpcSerialization = SerializationFactory.get(RpcSerialization.get(serialization));
         RpcProtocol protocol = new RpcProtocol();
         protocol.setHeader(header);
-        switch (msgTypeEnum) {
+        switch (msgTypeEnum){
             // 请求消息
             case REQUEST:
-                RpcRequest request = ((com.hua.socket.serilization.RpcSerialization) rpcSerialization).deserialize(data, RpcRequest.class);
+                RpcRequest request = rpcSerialization.deserialize(data,RpcRequest.class);
                 protocol.setBody(request);
                 break;
             // 响应消息
             case RESPONSE:
-                RpcResponse response = rpcSerialization.deserialize(data, RpcResponse.class);
+                RpcResponse response = rpcSerialization.deserialize(data,RpcResponse.class);
                 protocol.setBody(response);
-                break;
         }
         out.add(protocol);
     }

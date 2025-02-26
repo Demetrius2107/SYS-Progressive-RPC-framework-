@@ -34,7 +34,7 @@ public class RpcEncoder extends MessageToByteEncoder<RpcProtocol<Object>> {
         final byte[] ser = header.getSerialization();
         final String serialization = new String(ser);
         byteBuf.writeBytes(ser);
-        RpcSerialization rpcSerialization = SerializationFactory.get(RpcSerialization.get(serialization));
+        com.hua.socket.serilization.RpcSerialization rpcSerialization = SerializationFactory.get(RpcSerialization.get(serialization));
         byte[] data = rpcSerialization.serialize(msg.getBody());
         // 写入数据长度(接收方根据数据长度读取数据内容)
         byteBuf.writeInt(data.length);

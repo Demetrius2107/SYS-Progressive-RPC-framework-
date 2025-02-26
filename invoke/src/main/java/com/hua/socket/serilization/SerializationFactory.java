@@ -1,18 +1,27 @@
 package com.hua.socket.serilization;
 
+import com.hua.common.constants.RpcSerialization;
+
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @author: Elon
+ * @title: SerializationFactory
+ * @projectName: Progressive-RPC-framework
+ * @description:
+ * @date: 2025/2/26 17:51
+ */
 public class SerializationFactory {
 
-    private static Map<com.hua.common.constants.RpcSerialization, RpcSerialization> serializationMap
-            = new HashMap<com.hua.common.constants.RpcSerialization, RpcSerialization>();
+    private static Map<RpcSerialization, com.hua.socket.serilization.RpcSerialization>
+    serializationMap = new HashMap<RpcSerialization, com.hua.socket.serilization.RpcSerialization>();
 
     static {
-        serializationMap.put(com.hua.common.constants.RpcSerialization.JSON,new JsonSerialization());
+        serializationMap.put(RpcSerialization.JSON,new JsonSerialization());
     }
 
-    public static RpcSerialization get(com.hua.common.constants.RpcSerialization serialization){
+    public static com.hua.socket.serilization.RpcSerialization get(RpcSerialization serialization){
         return serializationMap.get(serialization);
     }
 }
