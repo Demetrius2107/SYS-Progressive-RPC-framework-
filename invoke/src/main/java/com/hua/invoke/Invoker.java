@@ -1,5 +1,7 @@
 package com.hua.invoke;
 
+import java.lang.reflect.InvocationTargetException;
+
 /**
  * @author: Elon
  * @title: Invoker
@@ -9,5 +11,5 @@ package com.hua.invoke;
  */
 public interface Invoker {
 
-
+    Object invoke(Invocation invocation) throws InvocationTargetException, ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException;
 }
