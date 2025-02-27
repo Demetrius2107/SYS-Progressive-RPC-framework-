@@ -13,6 +13,7 @@
         <module>Netty</module>
         <module>invoke</module>
         <module>Proxy</module>
+        <module>registry-center</module>
     </modules>
 
     <properties>
