@@ -14,7 +14,7 @@ import java.util.Map;
  */
 public class Cache {
 
-    public static Map<ServiceName, URL> serviceNameURLMap = new HashMap<ServiceName, URL>();
+    public static Map<ServiceName, URL> services = new HashMap<ServiceName, URL>();
 
     public static Map<URL, ChannelFuture> channelFutureMap = new HashMap<URL, ChannelFuture>();
 }
