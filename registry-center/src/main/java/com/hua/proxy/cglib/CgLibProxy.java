@@ -5,6 +5,7 @@ import com.hua.common.constants.MsgType;
 import com.hua.common.constants.ProtocolConstants;
 import com.hua.common.constants.Register;
 import com.hua.common.constants.RpcSerialization;
+import com.hua.register.RegistryFactory;
 import com.hua.service.HelloService;
 import com.hua.socket.codec.MsgHeader;
 import com.hua.socket.codec.RpcProtocol;
