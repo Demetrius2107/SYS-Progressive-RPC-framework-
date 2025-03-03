@@ -1,9 +1,13 @@
 package com.hua.register;
 
+import com.alibaba.fastjson.JSON;
 import com.hua.common.URL;
+import com.hua.event.*;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
 import org.apache.curator.framework.recipes.cache.PathChildrenCache;
+import org.apache.curator.framework.recipes.cache.PathChildrenCacheEvent;
+import org.apache.curator.framework.recipes.cache.PathChildrenCacheListener;
 import org.apache.curator.retry.ExponentialBackoffRetry;
 import org.apache.zookeeper.data.Stat;
 
@@ -107,6 +111,29 @@ public class CuratorZookeeperRegistry extends AbstractZookeeperRegistry {
         // 启动PathChildrenCache
         cache.start(PathChildrenCache.StartMode.POST_INITIALIZED_EVENT);
 
+
+        cache.getListenable().addListener(new PathChildrenCacheListener() {
+            @Override
+            public void childEvent(CuratorFramework curatorFramework, PathChildrenCacheEvent pathChildrenCacheEvent) throws Exception {
+                final PathChildrenCacheEvent.Type type = pathChildrenCacheEvent.getType();
+                System.out.println("PathChildrenCache event: " + type);
+
+                RpcEventData eventData = null;
+                if(type.equals(PathChildrenCacheEvent.Type.CHILD_REMOVED)){
+                    String path = pathChildrenCacheEvent.getData().getPath();
+                    final URL  url = parsePath(path);
+                    eventData = new DestroyEventData(url);
+                } else if (type.equals(PathChildrenCacheEvent.Type.CHILD_UPDATED) || type.equals(PathChildrenCacheEvent.Type.CHILD_ADDED)){
+                    String path = pathChildrenCacheEvent.getData().getPath();
+                    byte[] bytes = client.getData().forPath(path);
+                    Object o = JSON.parseObject(bytes,URL.class);
+                    eventData = type.equals(PathChildrenCacheEvent.Type.CHILD_UPDATED ? new UpdateRpcEventData(o) : new AddRpcEventData(o));
+
+                }
+
+                RpcListerLoader.sendEvent(eventData);
+            }
+        });
     }
 
 }
