@@ -101,8 +101,11 @@ public class CuratorZookeeperRegistry extends AbstractZookeeperRegistry {
         return false;
     }
 
-    public void watchNodeDataChange(String path) {
+    public void watchNodeDataChange(String path) throws Exception {
         PathChildrenCache cache = new PathChildrenCache(client,path,true);
+
+        // 启动PathChildrenCache
+        cache.start(PathChildrenCache.StartMode.POST_INITIALIZED_EVENT);
 
     }
 
